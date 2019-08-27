@@ -1,8 +1,29 @@
 Calculate Bitcoin Merkle Root
 =============================
+Educational project to compute Bitcoin Merkle root from block transaction ids.
 
-[Sample block].
+Built fo Ubuntu 16.04. Requires OpenSSL.
 
+Merkle trees are an efficient way to prove that an element is in a set, without having to store the full set. Each non-leaf node of a merkle tree is a hash of the concatenation of it's immediate children. The leaves of the tree are the elements of the set to which the Merkle tree proves membership. In the case of Bitcoin, the leaves of the Merkle tree are the transaction identifiers (the hash of a raw transaction). Leaves are concatenated pair-wise and hashed to provide parent nodes. If there are an odd number of transactions/leaves, the final leaf is concatenated with itself. Parent nodes are in turn concatenated in pairs and hashed, with the process repeated until a single Merkle hash remains - the Merkle root.
+
+The Merkle root is stored in a block header, where it serves to make transactions tamper-proof - if a transaction is changed, the Merkle root would be thrown off. Because the hash of each block is included in subsequent blocks, the tamper would be immediately evident and the block with the tampered transaction would not be accepted as valid by the Bitcoin consensus rules.
+
+To verify a transaction - check that a transaction is in a valid block - you just need the hashes of Merkle branch to compute the Merkle root, not the entire set of transactions in the block. 
+
+Build
+-----
+Build the project:
+
+* Clone this repo.
+* `cd` into project directory.
+* Run `make`.
+
+Test
+----
+Get the transactions from a [sample block][1]. Run programme, and compare the computed Merkle root with the value held in the block header.
+
+Sample Transactions
+-------------------
 Get sample transactions:
 
 Start `bitcoind`.
@@ -10,7 +31,13 @@ Start `bitcoind`.
 Fetch block and process results with `jq` to obtain a file comprised of `txid` hashes for all transactions in the block, ech on a separate line. The file `/tmp/tx` can then be used as input to the programme via input redirection 
 
 ```bash
-bitcoin-cli getblock 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 | jq -r '.tx[]' > /tmp/tx
+bitcoin-cli getblock 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 | jq -r '.tx[]' > /tmp/txid.manifest
+```
+
+Build the programme and run, passing in your `txid.manifest` to stdin by file redirection:
+
+```bash
+./bin/main < /tmp/txid.manifest
 ```
 
 [1]: https://www.blockchain.com/btc/block/00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13
