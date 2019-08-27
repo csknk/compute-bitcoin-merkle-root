@@ -1,5 +1,5 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef BITCOIN_H
+#define BITCOIN_H
 #include <vector>
 #include <array>
 #include <openssl/sha.h>
