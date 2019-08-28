@@ -24,6 +24,42 @@ The Merkle root is stored in a block header, where it serves to make transaction
 
 To verify a transaction - check that a transaction is in a valid block - you just need the hashes of Merkle branch to compute the Merkle root, not the entire set of transactions in the block. 
 
+C++ Implementation
+------------------
+
+Code from [bitcoin.cpp][3] in this repo:
+```c++
+
+/**
+ * Compute the Merkle root 
+ * */
+void merkleRoot(std::vector<Bytes> txids, Bytes& result)
+{
+	if (txids.empty()) {
+		throw;
+	}
+	while (txids.size() > 1) {
+		// If odd number, add the last element to end of vector.
+		// Note that this is required at every level of the tree.
+		if (txids.size() & 1) {
+			txids.push_back(txids.back());
+		}
+		std::vector<Bytes> tmp;
+		for (auto it = std::begin(txids); it != std::end(txids) && std::next(it) != txids.end(); it += 2) {
+			Bytes concat = *it;
+			Bytes result(hash_size);
+			concat.insert(concat.end(), (*(it + 1)).begin(), (*(it + 1)).end());
+			doubleSHA256(concat.data(), 64/*concat.size()*/, result);
+			tmp.push_back(result);
+			concat.clear();
+		}
+		txids = tmp;
+	}
+	result = txids[0];
+}
+
+```
+
 Build
 -----
 Build the project:
@@ -60,3 +96,4 @@ References
 
 [1]: https://www.blockchain.com/btc/block/00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13
 [2]: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp
+[3]: bitcoin.cpp
