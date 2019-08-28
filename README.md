@@ -49,7 +49,7 @@ void merkleRoot(std::vector<Bytes> txids, Bytes& result)
 			Bytes concat = *it;
 			Bytes result(hash_size);
 			concat.insert(concat.end(), (*(it + 1)).begin(), (*(it + 1)).end());
-			doubleSHA256(concat.data(), 64/*concat.size()*/, result);
+			doubleSHA256(concat.data(), concat.size(), result);
 			tmp.push_back(result);
 			concat.clear();
 		}
