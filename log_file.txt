@@ -20685,3 +20685,39 @@ Current hashes:
 2txids in this iteration.
 8621121af51ea3e1165ae912e9a4f16447685fce7fa69ca5d0ab4ba9781b7131
 
+while loop
+duplicating last element.
+
+Current hashes:
+---------------
+4txids in this iteration.
+0670d2c428dc9c49b87071394d42658b5d638817f80adb80438e41a049006532
+c44075eebca1af653e1b4e4a26c34ab8d55bcda18c39998bdcc80569b91d8630
+
+while loop
+Current hashes:
+---------------
+2txids in this iteration.
+a34b0105b14f10225d7903d146f6cbc6e435e0ac6eafcd0b83d3ba84c08077d4
+
+while loop
+Current hashes:
+---------------
+2txids in this iteration.
+e8a688515955ee2001e91c797d65fc48bb626f1fe8325d0b0fe13720aa5ae20c
+
+while loop
+duplicating last element.
+
+Current hashes:
+---------------
+4txids in this iteration.
+0670d2c428dc9c49b87071394d42658b5d638817f80adb80438e41a049006532
+c44075eebca1af653e1b4e4a26c34ab8d55bcda18c39998bdcc80569b91d8630
+
+while loop
+Current hashes:
+---------------
+2txids in this iteration.
+a34b0105b14f10225d7903d146f6cbc6e435e0ac6eafcd0b83d3ba84c08077d4
+

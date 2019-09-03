@@ -27,7 +27,7 @@ To verify a transaction - check that a transaction is in a valid block - you jus
 C++ Implementation
 ------------------
 
-Code from [bitcoin.cpp][3] in this repo:
+Compute a Merkle root from a set of transaction IDs (txid) expressed as hexadecimal strings. The code shown is from the file [bitcoin.cpp][3] in this repo:
 ```c++
 
 /**
@@ -59,6 +59,10 @@ void merkleRoot(std::vector<Bytes> txids, Bytes& result)
 }
 
 ```
+In this example, the `merkleRoot` function receives two parameters:
+
+* `std::vector<Bytes> txids` - where `Bytes` is an alias for `std::vector<uint8_t>`, a collection of byte objects.
+* `Bytes& result` - A `std::vector` of `<uint8_t>` objects, passed by reference to receive the result.
 
 Build
 -----
