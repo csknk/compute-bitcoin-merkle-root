@@ -35,27 +35,27 @@ Compute a Merkle root from a set of transaction IDs (txid) expressed as hexadeci
  * */
 void merkleRoot(std::vector<Bytes> txids, Bytes& result)
 {
-	if (txids.empty()) {
-		throw;
-	}
-	while (txids.size() > 1) {
-		// If odd number, add the last element to end of vector.
-		// Note that this is required at every level of the tree.
-		if (txids.size() & 1) {
-			txids.push_back(txids.back());
-		}
-		std::vector<Bytes> tmp;
-		for (auto it = std::begin(txids); it != std::end(txids) && std::next(it) != txids.end(); it += 2) {
-			Bytes concat = *it;
-			Bytes result(hash_size);
-			concat.insert(concat.end(), (*(it + 1)).begin(), (*(it + 1)).end());
-			doubleSHA256(concat.data(), concat.size(), result);
-			tmp.push_back(result);
-			concat.clear();
-		}
-		txids = tmp;
-	}
-	result = txids[0];
+  if (txids.empty()) {
+    throw;
+  }
+  while (txids.size() > 1) {
+    // If odd number, add the last element to end of vector.
+    // Note that this is required at every level of the tree.
+    if (txids.size() & 1) {
+      txids.push_back(txids.back());
+    }
+    std::vector<Bytes> tmp;
+    for (auto it = std::begin(txids); it != std::end(txids) && std::next(it) != txids.end(); it += 2) {
+      Bytes concat = *it;
+      Bytes result(hash_size);
+      concat.insert(concat.end(), (*(it + 1)).begin(), (*(it + 1)).end());
+      doubleSHA256(concat.data(), concat.size(), result);
+      tmp.push_back(result);
+      concat.clear();
+    }
+    txids = tmp;
+  }
+  result = txids[0];
 }
 
 ```
