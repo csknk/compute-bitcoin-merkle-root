@@ -24,6 +24,14 @@ The Merkle root is stored in a block header, where it serves to make transaction
 
 To verify a transaction - check that a transaction is in a valid block - you just need the hashes of Merkle branch to compute the Merkle root, not the entire set of transactions in the block. 
 
+Flaw in Bitcoin Implementation of Merkle Trees
+----------------------------------------------
+As can be seen in [this comment][4] in the Bitcoin Core codebase, and described comprehensively [in BIP 98][5], there is a flaw in the Bicoin implementation of Bitcoin's Merkle tree algorithm relating to duplicate txids.
+
+The flaw is caused by the duplication of the last node in the case of levels that have an odd number of nodes - a practice which is non-standard for Merkle trees.
+
+
+
 C++ Implementation
 ------------------
 
@@ -68,9 +76,10 @@ Build
 -----
 Build the project:
 
-* Clone this repo.
-* `cd` into project directory.
-* Run `make`.
+- Clone this repo.
+- `cd` into project directory.
+- Run `make`.
+- Run the executable. 
 
 Test
 ----
@@ -93,11 +102,20 @@ Build the programme and run, passing in your `txid.manifest` to stdin by file re
 ```bash
 ./bin/main < /tmp/txid.manifest
 ```
+
+Next Steps
+----------
+Build a verification routine: check that a transaction is included in a block by evaluating the Merkle branch.
+
 References
 ----------
 * [Bitcoin core Merkle root computation][2]
-
+* [Merkle root computation in this repo][3]
+* [Merkle Trees][6] (Wikipedia)
 
 [1]: https://www.blockchain.com/btc/block/00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13
 [2]: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp
 [3]: bitcoin.cpp
+[4]: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp#L8
+[5]: https://github.com/bitcoin/bips/blob/master/bip-0098.mediawiki
+[6]: https://en.wikipedia.org/wiki/Merkle_tree
