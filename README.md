@@ -44,6 +44,7 @@ void merkleRoot(std::vector<Bytes> txids, Bytes& result)
   if (txids.empty()) {
     throw;
   }
+  // Loop until the txid container has been reduced to a single element - the Merkle root
   while (txids.size() > 1) {
     // If odd number, add the last element to end of vector.
     // Note that this is required at every level of the tree.
@@ -54,13 +55,22 @@ void merkleRoot(std::vector<Bytes> txids, Bytes& result)
     for (auto it = std::begin(txids); it != std::end(txids) && std::next(it) != txids.end(); it += 2) {
       Bytes concat = *it;
       Bytes result(hash_size);
+      
+      // Concatenate this element and the following adjacent element
       concat.insert(concat.end(), (*(it + 1)).begin(), (*(it + 1)).end());
+      
+      // Hash the concatenated elements, save into `result` container
       doubleSHA256(concat.data(), concat.size(), result);
+
+      // `tmp` is a container holding the results of concatenating & hashing
       tmp.push_back(result);
       concat.clear();
     }
+    // Set txids to reflect the reduction in elements from this round of concatenation/hashing
     txids = tmp;
   }
+
+  // At this point, `txids` should be a container with a single element.
   result = txids[0];
 }
 
@@ -84,12 +94,14 @@ Usage
 Get the transactions from a [sample block][1] and save these as a manifest file:
 
 ```bash
-# Write transaction ids for block 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 to /tmp/manifest
+# Write transaction ids for block
+# 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13
+# to /tmp/manifest
 bitcoind --daemon # bitcoind must be running
 
-# Fetch block and process results with `jq` to obtain a file comprised of `txid` hashes for all transactions
-# in the block, each on a separate line. The file `/tmp/txid.manifest` can then be used as input to the programme
-# via input redirection:
+# Fetch block and process results with `jq` to obtain a file comprised of `txid` hashes for all
+# transactions in the block, each on a separate line. The file `/tmp/txid.manifest` can then be
+# used as input to the programme via input redirection:
 bitcoin-cli getblock 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 | jq -r '.tx[]' > /tmp/txid.manifest
 bitcoin-cli stop
 ```
