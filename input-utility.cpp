@@ -1,6 +1,10 @@
 #include "input-utility.h"
 
 namespace input {
+/**
+ * This function is ueful for supplying TXIDS from a multi-line
+ * manifest file, building data into a vector of strings.
+ * */
 void multiLineInput(std::vector<std::string>& v)
 {
 	// Discard leading whitespace

@@ -1,8 +1,8 @@
 Calculate Bitcoin Merkle Root
 =============================
-Educational project to compute Bitcoin Merkle root from block transaction ids.
+Project to compute Bitcoin Merkle root from block transaction ids.
 
-Built on Ubuntu 16.04. Requires OpenSSL.
+Uses C++. Built on Ubuntu 16.04. Requires OpenSSL.
 
 Merkle Trees
 ------------
@@ -29,8 +29,6 @@ Flaw in Bitcoin Implementation of Merkle Trees
 As can be seen in [this comment][4] in the Bitcoin Core codebase, and described comprehensively [in BIP 98][5], there is a flaw in the Bicoin implementation of Bitcoin's Merkle tree algorithm relating to duplicate txids.
 
 The flaw is caused by the duplication of the last node in the case of levels that have an odd number of nodes - a practice which is non-standard for Merkle trees.
-
-
 
 C++ Implementation
 ------------------
@@ -81,20 +79,19 @@ Build the project:
 - Run `make`.
 - Run the executable. 
 
-Test
-----
-Get the transactions from a [sample block][1]. Run programme, and compare the computed Merkle root with the value held in the block header.
-
-Sample Transactions
--------------------
-Get sample transactions:
-
-Start `bitcoind`.
-
-Fetch block and process results with `jq` to obtain a file comprised of `txid` hashes for all transactions in the block, ech on a separate line. The file `/tmp/tx` can then be used as input to the programme via input redirection 
+Usage
+-----
+Get the transactions from a [sample block][1] and save these as a manifest file:
 
 ```bash
+# Write transaction ids for block 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 to /tmp/manifest
+bitcoind --daemon # bitcoind must be running
+
+# Fetch block and process results with `jq` to obtain a file comprised of `txid` hashes for all transactions
+# in the block, each on a separate line. The file `/tmp/txid.manifest` can then be used as input to the programme
+# via input redirection:
 bitcoin-cli getblock 00000000000000000002f5b1c49b9ddf5537d418b6c5b835172b3987a09a4b13 | jq -r '.tx[]' > /tmp/txid.manifest
+bitcoin-cli stop
 ```
 
 Build the programme and run, passing in your `txid.manifest` to stdin by file redirection:
